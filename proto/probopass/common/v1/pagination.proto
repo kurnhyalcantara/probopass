@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package probopass.common.v1;
+
+// PageRequest is embedded in list request messages to control pagination.
+// Pagination is token-based: the first request leaves page_token empty, and
+// subsequent requests pass the next_page_token from the previous PageResponse.
+message PageRequest {
+  // Maximum number of items to return. Servers may cap this value.
+  // If unset or zero, the server applies its default page size.
+  int32 page_size = 1;
+
+  // Opaque token identifying the page to retrieve. Leave empty for the
+  // first page. Obtained from PageResponse.next_page_token.
+  string page_token = 2;
+}
+
+// PageResponse is embedded in list response messages alongside the items.
+message PageResponse {
+  // Token to pass as PageRequest.page_token to retrieve the next page.
+  // Empty when there are no more pages.
+  string next_page_token = 1;
+
+  // Total number of items across all pages, if the server computes it.
+  // Zero means the total is unknown or not provided.
+  int64 total_size = 2;
+}

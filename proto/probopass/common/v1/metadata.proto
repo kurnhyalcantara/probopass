@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package probopass.common.v1;
+
+import "google/protobuf/timestamp.proto";
+
+// RequestMetadata carries client and tracing context with a request.
+// Services use it for auditing, rate limiting, and request correlation;
+// it must never influence business outcomes.
+message RequestMetadata {
+  // Unique identifier for this request, used for tracing and idempotency.
+  // Clients should generate a UUID per logical request.
+  string request_id = 1;
+
+  // Identifier of the calling client application or service.
+  string client_id = 2;
+
+  // User agent string of the originating client, when available.
+  string user_agent = 3;
+
+  // IP address of the originating client, when available.
+  string ip_address = 4;
+}
+
+// AuditMetadata records who created or last modified a resource and when.
+// Embedded in resource messages returned by services.
+message AuditMetadata {
+  // Time the resource was created.
+  google.protobuf.Timestamp created_at = 1;
+
+  // Time the resource was last updated.
+  google.protobuf.Timestamp updated_at = 2;
+
+  // Identifier of the principal that created the resource.
+  string created_by = 3;
+
+  // Identifier of the principal that last updated the resource.
+  string updated_by = 4;
+}

@@ -1,0 +1,61 @@
+syntax = "proto3";
+
+package probopass.common.v1;
+
+// ErrorCode classifies failures consistently across all probopass services.
+// Codes map closely to gRPC status codes so gateways can translate them
+// to HTTP statuses mechanically.
+enum ErrorCode {
+  // Default value; never set explicitly.
+  ERROR_CODE_UNSPECIFIED = 0;
+
+  // The request is malformed or a field failed validation.
+  ERROR_CODE_INVALID_ARGUMENT = 1;
+
+  // The referenced resource does not exist.
+  ERROR_CODE_NOT_FOUND = 2;
+
+  // The resource being created already exists.
+  ERROR_CODE_ALREADY_EXISTS = 3;
+
+  // The caller is not authenticated or the credentials are invalid/expired.
+  ERROR_CODE_UNAUTHENTICATED = 4;
+
+  // The caller is authenticated but not allowed to perform the operation.
+  ERROR_CODE_PERMISSION_DENIED = 5;
+
+  // The operation conflicts with the current state of the resource.
+  ERROR_CODE_FAILED_PRECONDITION = 6;
+
+  // The caller has exhausted a quota or rate limit.
+  ERROR_CODE_RESOURCE_EXHAUSTED = 7;
+
+  // An unexpected internal failure occurred.
+  ERROR_CODE_INTERNAL = 8;
+
+  // The service is temporarily unavailable; the request may be retried.
+  ERROR_CODE_UNAVAILABLE = 9;
+}
+
+// FieldViolation describes a validation failure on a single request field.
+message FieldViolation {
+  // Path of the offending field, e.g. "email" or "profile.full_name".
+  string field = 1;
+
+  // Human-readable description of why the field is invalid.
+  string description = 2;
+}
+
+// ErrorDetail is the structured error payload attached to failed responses,
+// typically via google.rpc.Status details.
+message ErrorDetail {
+  // Machine-readable classification of the failure.
+  ErrorCode code = 1;
+
+  // Human-readable message safe to surface to clients.
+  string message = 2;
+
+  // Per-field validation failures, set when code is
+  // ERROR_CODE_INVALID_ARGUMENT.
+  repeated FieldViolation field_violations = 3;
+}
