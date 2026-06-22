@@ -53,6 +53,25 @@ service AuthService {
       body: "*"
     };
   }
+
+  // ForgotPassword begins a password reset by emailing a reset link to the
+  // address, if an account exists. The response is identical whether or not
+  // the address is registered, to avoid account enumeration.
+  rpc ForgotPassword(ForgotPasswordRequest) returns (ForgotPasswordResponse) {
+    option (google.api.http) = {
+      post: "/v1/auth/forgot-password"
+      body: "*"
+    };
+  }
+
+  // ResetPassword completes a password reset: it verifies the single-use
+  // token, sets the new password, and revokes all of the user's sessions.
+  rpc ResetPassword(ResetPasswordRequest) returns (ResetPasswordResponse) {
+    option (google.api.http) = {
+      post: "/v1/auth/reset-password"
+      body: "*"
+    };
+  }
 }
 
 // TokenPair is the JWT credential set issued on successful authentication.
@@ -171,5 +190,35 @@ message LogoutRequest {
 
 message LogoutResponse {
   // Whether a session was found and revoked.
+  bool success = 1;
+}
+
+message ForgotPasswordRequest {
+  // Email address of the account to recover.
+  string email = 1;
+
+  // Optional client and tracing context.
+  probopass.common.v1.RequestMetadata metadata = 2;
+}
+
+message ForgotPasswordResponse {
+  // Always true. The response is intentionally uniform so callers cannot
+  // tell whether the email address is registered.
+  bool success = 1;
+}
+
+message ResetPasswordRequest {
+  // Single-use reset token delivered in the password reset email.
+  string token = 1;
+
+  // New plaintext password; transported over TLS and hashed by the service.
+  string new_password = 2;
+
+  // Optional client and tracing context.
+  probopass.common.v1.RequestMetadata metadata = 3;
+}
+
+message ResetPasswordResponse {
+  // Whether the password was reset.
   bool success = 1;
 }

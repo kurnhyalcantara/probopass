@@ -737,6 +737,214 @@ func (x *LogoutResponse) GetSuccess() bool {
 	return false
 }
 
+type ForgotPasswordRequest struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Email address of the account to recover.
+	Email string `protobuf:"bytes,1,opt,name=email,proto3" json:"email,omitempty"`
+	// Optional client and tracing context.
+	Metadata      *v1.RequestMetadata `protobuf:"bytes,2,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ForgotPasswordRequest) Reset() {
+	*x = ForgotPasswordRequest{}
+	mi := &file_probopass_auth_v1_auth_proto_msgTypes[12]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ForgotPasswordRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ForgotPasswordRequest) ProtoMessage() {}
+
+func (x *ForgotPasswordRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_probopass_auth_v1_auth_proto_msgTypes[12]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ForgotPasswordRequest.ProtoReflect.Descriptor instead.
+func (*ForgotPasswordRequest) Descriptor() ([]byte, []int) {
+	return file_probopass_auth_v1_auth_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *ForgotPasswordRequest) GetEmail() string {
+	if x != nil {
+		return x.Email
+	}
+	return ""
+}
+
+func (x *ForgotPasswordRequest) GetMetadata() *v1.RequestMetadata {
+	if x != nil {
+		return x.Metadata
+	}
+	return nil
+}
+
+type ForgotPasswordResponse struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Always true. The response is intentionally uniform so callers cannot
+	// tell whether the email address is registered.
+	Success       bool `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ForgotPasswordResponse) Reset() {
+	*x = ForgotPasswordResponse{}
+	mi := &file_probopass_auth_v1_auth_proto_msgTypes[13]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ForgotPasswordResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ForgotPasswordResponse) ProtoMessage() {}
+
+func (x *ForgotPasswordResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_probopass_auth_v1_auth_proto_msgTypes[13]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ForgotPasswordResponse.ProtoReflect.Descriptor instead.
+func (*ForgotPasswordResponse) Descriptor() ([]byte, []int) {
+	return file_probopass_auth_v1_auth_proto_rawDescGZIP(), []int{13}
+}
+
+func (x *ForgotPasswordResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+type ResetPasswordRequest struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Single-use reset token delivered in the password reset email.
+	Token string `protobuf:"bytes,1,opt,name=token,proto3" json:"token,omitempty"`
+	// New plaintext password; transported over TLS and hashed by the service.
+	NewPassword string `protobuf:"bytes,2,opt,name=new_password,json=newPassword,proto3" json:"new_password,omitempty"`
+	// Optional client and tracing context.
+	Metadata      *v1.RequestMetadata `protobuf:"bytes,3,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ResetPasswordRequest) Reset() {
+	*x = ResetPasswordRequest{}
+	mi := &file_probopass_auth_v1_auth_proto_msgTypes[14]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ResetPasswordRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ResetPasswordRequest) ProtoMessage() {}
+
+func (x *ResetPasswordRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_probopass_auth_v1_auth_proto_msgTypes[14]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ResetPasswordRequest.ProtoReflect.Descriptor instead.
+func (*ResetPasswordRequest) Descriptor() ([]byte, []int) {
+	return file_probopass_auth_v1_auth_proto_rawDescGZIP(), []int{14}
+}
+
+func (x *ResetPasswordRequest) GetToken() string {
+	if x != nil {
+		return x.Token
+	}
+	return ""
+}
+
+func (x *ResetPasswordRequest) GetNewPassword() string {
+	if x != nil {
+		return x.NewPassword
+	}
+	return ""
+}
+
+func (x *ResetPasswordRequest) GetMetadata() *v1.RequestMetadata {
+	if x != nil {
+		return x.Metadata
+	}
+	return nil
+}
+
+type ResetPasswordResponse struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Whether the password was reset.
+	Success       bool `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ResetPasswordResponse) Reset() {
+	*x = ResetPasswordResponse{}
+	mi := &file_probopass_auth_v1_auth_proto_msgTypes[15]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ResetPasswordResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ResetPasswordResponse) ProtoMessage() {}
+
+func (x *ResetPasswordResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_probopass_auth_v1_auth_proto_msgTypes[15]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ResetPasswordResponse.ProtoReflect.Descriptor instead.
+func (*ResetPasswordResponse) Descriptor() ([]byte, []int) {
+	return file_probopass_auth_v1_auth_proto_rawDescGZIP(), []int{15}
+}
+
+func (x *ResetPasswordResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
 var File_probopass_auth_v1_auth_proto protoreflect.FileDescriptor
 
 const file_probopass_auth_v1_auth_proto_rawDesc = "" +
@@ -787,13 +995,26 @@ const file_probopass_auth_v1_auth_proto_rawDesc = "" +
 	"\rrefresh_token\x18\x01 \x01(\tR\frefreshToken\x12@\n" +
 	"\bmetadata\x18\x02 \x01(\v2$.probopass.common.v1.RequestMetadataR\bmetadata\"*\n" +
 	"\x0eLogoutResponse\x12\x18\n" +
-	"\asuccess\x18\x01 \x01(\bR\asuccess2\xd3\x04\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\"o\n" +
+	"\x15ForgotPasswordRequest\x12\x14\n" +
+	"\x05email\x18\x01 \x01(\tR\x05email\x12@\n" +
+	"\bmetadata\x18\x02 \x01(\v2$.probopass.common.v1.RequestMetadataR\bmetadata\"2\n" +
+	"\x16ForgotPasswordResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\"\x91\x01\n" +
+	"\x14ResetPasswordRequest\x12\x14\n" +
+	"\x05token\x18\x01 \x01(\tR\x05token\x12!\n" +
+	"\fnew_password\x18\x02 \x01(\tR\vnewPassword\x12@\n" +
+	"\bmetadata\x18\x03 \x01(\v2$.probopass.common.v1.RequestMetadataR\bmetadata\"1\n" +
+	"\x15ResetPasswordResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess2\xe9\x06\n" +
 	"\vAuthService\x12q\n" +
 	"\bRegister\x12\".probopass.auth.v1.RegisterRequest\x1a#.probopass.auth.v1.RegisterResponse\"\x1c\x82\xd3\xe4\x93\x02\x16:\x01*\"\x11/v1/auth/register\x12e\n" +
 	"\x05Login\x12\x1f.probopass.auth.v1.LoginRequest\x1a .probopass.auth.v1.LoginResponse\"\x19\x82\xd3\xe4\x93\x02\x13:\x01*\"\x0e/v1/auth/login\x12|\n" +
 	"\fRefreshToken\x12&.probopass.auth.v1.RefreshTokenRequest\x1a'.probopass.auth.v1.RefreshTokenResponse\"\x1b\x82\xd3\xe4\x93\x02\x15:\x01*\"\x10/v1/auth/refresh\x12\x80\x01\n" +
 	"\rValidateToken\x12'.probopass.auth.v1.ValidateTokenRequest\x1a(.probopass.auth.v1.ValidateTokenResponse\"\x1c\x82\xd3\xe4\x93\x02\x16:\x01*\"\x11/v1/auth/validate\x12i\n" +
-	"\x06Logout\x12 .probopass.auth.v1.LogoutRequest\x1a!.probopass.auth.v1.LogoutResponse\"\x1a\x82\xd3\xe4\x93\x02\x14:\x01*\"\x0f/v1/auth/logoutB\xce\x01\n" +
+	"\x06Logout\x12 .probopass.auth.v1.LogoutRequest\x1a!.probopass.auth.v1.LogoutResponse\"\x1a\x82\xd3\xe4\x93\x02\x14:\x01*\"\x0f/v1/auth/logout\x12\x8a\x01\n" +
+	"\x0eForgotPassword\x12(.probopass.auth.v1.ForgotPasswordRequest\x1a).probopass.auth.v1.ForgotPasswordResponse\"#\x82\xd3\xe4\x93\x02\x1d:\x01*\"\x18/v1/auth/forgot-password\x12\x86\x01\n" +
+	"\rResetPassword\x12'.probopass.auth.v1.ResetPasswordRequest\x1a(.probopass.auth.v1.ResetPasswordResponse\"\"\x82\xd3\xe4\x93\x02\x1c:\x01*\"\x17/v1/auth/reset-passwordB\xce\x01\n" +
 	"\x15com.probopass.auth.v1B\tAuthProtoP\x01ZDgithub.com/kurnhyalcantara/probopass/gen/go/probopass/auth/v1;authv1\xa2\x02\x03PAX\xaa\x02\x11Probopass.Auth.V1\xca\x02\x11Probopass\\Auth\\V1\xe2\x02\x1dProbopass\\Auth\\V1\\GPBMetadata\xea\x02\x13Probopass::Auth::V1b\x06proto3"
 
 var (
@@ -808,50 +1029,60 @@ func file_probopass_auth_v1_auth_proto_rawDescGZIP() []byte {
 	return file_probopass_auth_v1_auth_proto_rawDescData
 }
 
-var file_probopass_auth_v1_auth_proto_msgTypes = make([]protoimpl.MessageInfo, 12)
+var file_probopass_auth_v1_auth_proto_msgTypes = make([]protoimpl.MessageInfo, 16)
 var file_probopass_auth_v1_auth_proto_goTypes = []any{
-	(*TokenPair)(nil),             // 0: probopass.auth.v1.TokenPair
-	(*TokenClaims)(nil),           // 1: probopass.auth.v1.TokenClaims
-	(*RegisterRequest)(nil),       // 2: probopass.auth.v1.RegisterRequest
-	(*RegisterResponse)(nil),      // 3: probopass.auth.v1.RegisterResponse
-	(*LoginRequest)(nil),          // 4: probopass.auth.v1.LoginRequest
-	(*LoginResponse)(nil),         // 5: probopass.auth.v1.LoginResponse
-	(*RefreshTokenRequest)(nil),   // 6: probopass.auth.v1.RefreshTokenRequest
-	(*RefreshTokenResponse)(nil),  // 7: probopass.auth.v1.RefreshTokenResponse
-	(*ValidateTokenRequest)(nil),  // 8: probopass.auth.v1.ValidateTokenRequest
-	(*ValidateTokenResponse)(nil), // 9: probopass.auth.v1.ValidateTokenResponse
-	(*LogoutRequest)(nil),         // 10: probopass.auth.v1.LogoutRequest
-	(*LogoutResponse)(nil),        // 11: probopass.auth.v1.LogoutResponse
-	(*timestamppb.Timestamp)(nil), // 12: google.protobuf.Timestamp
-	(*v1.RequestMetadata)(nil),    // 13: probopass.common.v1.RequestMetadata
+	(*TokenPair)(nil),              // 0: probopass.auth.v1.TokenPair
+	(*TokenClaims)(nil),            // 1: probopass.auth.v1.TokenClaims
+	(*RegisterRequest)(nil),        // 2: probopass.auth.v1.RegisterRequest
+	(*RegisterResponse)(nil),       // 3: probopass.auth.v1.RegisterResponse
+	(*LoginRequest)(nil),           // 4: probopass.auth.v1.LoginRequest
+	(*LoginResponse)(nil),          // 5: probopass.auth.v1.LoginResponse
+	(*RefreshTokenRequest)(nil),    // 6: probopass.auth.v1.RefreshTokenRequest
+	(*RefreshTokenResponse)(nil),   // 7: probopass.auth.v1.RefreshTokenResponse
+	(*ValidateTokenRequest)(nil),   // 8: probopass.auth.v1.ValidateTokenRequest
+	(*ValidateTokenResponse)(nil),  // 9: probopass.auth.v1.ValidateTokenResponse
+	(*LogoutRequest)(nil),          // 10: probopass.auth.v1.LogoutRequest
+	(*LogoutResponse)(nil),         // 11: probopass.auth.v1.LogoutResponse
+	(*ForgotPasswordRequest)(nil),  // 12: probopass.auth.v1.ForgotPasswordRequest
+	(*ForgotPasswordResponse)(nil), // 13: probopass.auth.v1.ForgotPasswordResponse
+	(*ResetPasswordRequest)(nil),   // 14: probopass.auth.v1.ResetPasswordRequest
+	(*ResetPasswordResponse)(nil),  // 15: probopass.auth.v1.ResetPasswordResponse
+	(*timestamppb.Timestamp)(nil),  // 16: google.protobuf.Timestamp
+	(*v1.RequestMetadata)(nil),     // 17: probopass.common.v1.RequestMetadata
 }
 var file_probopass_auth_v1_auth_proto_depIdxs = []int32{
-	12, // 0: probopass.auth.v1.TokenPair.access_token_expires_at:type_name -> google.protobuf.Timestamp
-	12, // 1: probopass.auth.v1.TokenClaims.issued_at:type_name -> google.protobuf.Timestamp
-	12, // 2: probopass.auth.v1.TokenClaims.expires_at:type_name -> google.protobuf.Timestamp
-	13, // 3: probopass.auth.v1.RegisterRequest.metadata:type_name -> probopass.common.v1.RequestMetadata
+	16, // 0: probopass.auth.v1.TokenPair.access_token_expires_at:type_name -> google.protobuf.Timestamp
+	16, // 1: probopass.auth.v1.TokenClaims.issued_at:type_name -> google.protobuf.Timestamp
+	16, // 2: probopass.auth.v1.TokenClaims.expires_at:type_name -> google.protobuf.Timestamp
+	17, // 3: probopass.auth.v1.RegisterRequest.metadata:type_name -> probopass.common.v1.RequestMetadata
 	0,  // 4: probopass.auth.v1.RegisterResponse.tokens:type_name -> probopass.auth.v1.TokenPair
-	13, // 5: probopass.auth.v1.LoginRequest.metadata:type_name -> probopass.common.v1.RequestMetadata
+	17, // 5: probopass.auth.v1.LoginRequest.metadata:type_name -> probopass.common.v1.RequestMetadata
 	0,  // 6: probopass.auth.v1.LoginResponse.tokens:type_name -> probopass.auth.v1.TokenPair
-	13, // 7: probopass.auth.v1.RefreshTokenRequest.metadata:type_name -> probopass.common.v1.RequestMetadata
+	17, // 7: probopass.auth.v1.RefreshTokenRequest.metadata:type_name -> probopass.common.v1.RequestMetadata
 	0,  // 8: probopass.auth.v1.RefreshTokenResponse.tokens:type_name -> probopass.auth.v1.TokenPair
 	1,  // 9: probopass.auth.v1.ValidateTokenResponse.claims:type_name -> probopass.auth.v1.TokenClaims
-	13, // 10: probopass.auth.v1.LogoutRequest.metadata:type_name -> probopass.common.v1.RequestMetadata
-	2,  // 11: probopass.auth.v1.AuthService.Register:input_type -> probopass.auth.v1.RegisterRequest
-	4,  // 12: probopass.auth.v1.AuthService.Login:input_type -> probopass.auth.v1.LoginRequest
-	6,  // 13: probopass.auth.v1.AuthService.RefreshToken:input_type -> probopass.auth.v1.RefreshTokenRequest
-	8,  // 14: probopass.auth.v1.AuthService.ValidateToken:input_type -> probopass.auth.v1.ValidateTokenRequest
-	10, // 15: probopass.auth.v1.AuthService.Logout:input_type -> probopass.auth.v1.LogoutRequest
-	3,  // 16: probopass.auth.v1.AuthService.Register:output_type -> probopass.auth.v1.RegisterResponse
-	5,  // 17: probopass.auth.v1.AuthService.Login:output_type -> probopass.auth.v1.LoginResponse
-	7,  // 18: probopass.auth.v1.AuthService.RefreshToken:output_type -> probopass.auth.v1.RefreshTokenResponse
-	9,  // 19: probopass.auth.v1.AuthService.ValidateToken:output_type -> probopass.auth.v1.ValidateTokenResponse
-	11, // 20: probopass.auth.v1.AuthService.Logout:output_type -> probopass.auth.v1.LogoutResponse
-	16, // [16:21] is the sub-list for method output_type
-	11, // [11:16] is the sub-list for method input_type
-	11, // [11:11] is the sub-list for extension type_name
-	11, // [11:11] is the sub-list for extension extendee
-	0,  // [0:11] is the sub-list for field type_name
+	17, // 10: probopass.auth.v1.LogoutRequest.metadata:type_name -> probopass.common.v1.RequestMetadata
+	17, // 11: probopass.auth.v1.ForgotPasswordRequest.metadata:type_name -> probopass.common.v1.RequestMetadata
+	17, // 12: probopass.auth.v1.ResetPasswordRequest.metadata:type_name -> probopass.common.v1.RequestMetadata
+	2,  // 13: probopass.auth.v1.AuthService.Register:input_type -> probopass.auth.v1.RegisterRequest
+	4,  // 14: probopass.auth.v1.AuthService.Login:input_type -> probopass.auth.v1.LoginRequest
+	6,  // 15: probopass.auth.v1.AuthService.RefreshToken:input_type -> probopass.auth.v1.RefreshTokenRequest
+	8,  // 16: probopass.auth.v1.AuthService.ValidateToken:input_type -> probopass.auth.v1.ValidateTokenRequest
+	10, // 17: probopass.auth.v1.AuthService.Logout:input_type -> probopass.auth.v1.LogoutRequest
+	12, // 18: probopass.auth.v1.AuthService.ForgotPassword:input_type -> probopass.auth.v1.ForgotPasswordRequest
+	14, // 19: probopass.auth.v1.AuthService.ResetPassword:input_type -> probopass.auth.v1.ResetPasswordRequest
+	3,  // 20: probopass.auth.v1.AuthService.Register:output_type -> probopass.auth.v1.RegisterResponse
+	5,  // 21: probopass.auth.v1.AuthService.Login:output_type -> probopass.auth.v1.LoginResponse
+	7,  // 22: probopass.auth.v1.AuthService.RefreshToken:output_type -> probopass.auth.v1.RefreshTokenResponse
+	9,  // 23: probopass.auth.v1.AuthService.ValidateToken:output_type -> probopass.auth.v1.ValidateTokenResponse
+	11, // 24: probopass.auth.v1.AuthService.Logout:output_type -> probopass.auth.v1.LogoutResponse
+	13, // 25: probopass.auth.v1.AuthService.ForgotPassword:output_type -> probopass.auth.v1.ForgotPasswordResponse
+	15, // 26: probopass.auth.v1.AuthService.ResetPassword:output_type -> probopass.auth.v1.ResetPasswordResponse
+	20, // [20:27] is the sub-list for method output_type
+	13, // [13:20] is the sub-list for method input_type
+	13, // [13:13] is the sub-list for extension type_name
+	13, // [13:13] is the sub-list for extension extendee
+	0,  // [0:13] is the sub-list for field type_name
 }
 
 func init() { file_probopass_auth_v1_auth_proto_init() }
@@ -865,7 +1096,7 @@ func file_probopass_auth_v1_auth_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_probopass_auth_v1_auth_proto_rawDesc), len(file_probopass_auth_v1_auth_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   12,
+			NumMessages:   16,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
