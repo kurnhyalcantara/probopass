@@ -1,0 +1,121 @@
+syntax = "proto3";
+
+package probopass.example.v1;
+
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+import "probopass/common/v1/pagination.proto";
+
+// ExampleService is the reference CRUD service template. It demonstrates the
+// canonical request/response shape — unary RPCs, grpc-gateway HTTP bindings,
+// and token-based list pagination via probopass.common.v1 — that every new
+// service should mirror.
+service ExampleService {
+  // CreateExample creates a new example resource.
+  rpc CreateExample(CreateExampleRequest) returns (CreateExampleResponse) {
+    option (google.api.http) = {
+      post: "/v1/examples"
+      body: "*"
+    };
+  }
+
+  // GetExample returns an example resource by id.
+  rpc GetExample(GetExampleRequest) returns (GetExampleResponse) {
+    option (google.api.http) = {get: "/v1/examples/{id}"};
+  }
+
+  // ListExamples returns a page of example resources.
+  rpc ListExamples(ListExamplesRequest) returns (ListExamplesResponse) {
+    option (google.api.http) = {get: "/v1/examples"};
+  }
+
+  // UpdateExample updates an existing example resource.
+  rpc UpdateExample(UpdateExampleRequest) returns (UpdateExampleResponse) {
+    option (google.api.http) = {
+      patch: "/v1/examples/{id}"
+      body: "*"
+    };
+  }
+
+  // DeleteExample removes an example resource by id.
+  rpc DeleteExample(DeleteExampleRequest) returns (DeleteExampleResponse) {
+    option (google.api.http) = {delete: "/v1/examples/{id}"};
+  }
+}
+
+// Example is the reference resource entity.
+message Example {
+  // Unique identifier of the example.
+  string id = 1;
+
+  // Human-readable name of the example.
+  string name = 2;
+
+  // Free-form description of the example.
+  string description = 3;
+
+  // Time the example was created.
+  google.protobuf.Timestamp created_at = 4;
+
+  // Time the example was last updated.
+  google.protobuf.Timestamp updated_at = 5;
+}
+
+message CreateExampleRequest {
+  // Name of the example to create.
+  string name = 1;
+
+  // Description of the example to create.
+  string description = 2;
+}
+
+message CreateExampleResponse {
+  // The newly created example.
+  Example example = 1;
+}
+
+message GetExampleRequest {
+  // Identifier of the example to fetch.
+  string id = 1;
+}
+
+message GetExampleResponse {
+  // The requested example.
+  Example example = 1;
+}
+
+message ListExamplesRequest {
+  // Pagination controls.
+  probopass.common.v1.PageRequest page = 1;
+}
+
+message ListExamplesResponse {
+  // The page of examples.
+  repeated Example examples = 1;
+
+  // Pagination metadata for fetching the next page.
+  probopass.common.v1.PageResponse page = 2;
+}
+
+message UpdateExampleRequest {
+  // Identifier of the example to update.
+  string id = 1;
+
+  // New name for the example.
+  string name = 2;
+
+  // New description for the example.
+  string description = 3;
+}
+
+message UpdateExampleResponse {
+  // The updated example.
+  Example example = 1;
+}
+
+message DeleteExampleRequest {
+  // Identifier of the example to delete.
+  string id = 1;
+}
+
+message DeleteExampleResponse {}
