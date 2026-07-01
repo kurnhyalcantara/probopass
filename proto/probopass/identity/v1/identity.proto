@@ -1,0 +1,97 @@
+syntax = "proto3";
+
+package probopass.identity.v1;
+
+import "google/api/annotations.proto";
+
+// IdentityService is the Identity bounded context's contract for the subset of
+// identity data the Authentication Module needs: resolving a login identifier
+// to an internal identity, checking account status, and reading display data
+// (display name, masked phone) for MFA and notifications. Identity creation,
+// profiles, roles, and permissions are owned by their respective contexts and
+// are not exposed here. These RPCs are internal-only (service-to-service).
+service IdentityService {
+  // ResolveIdentity maps a submitted login identifier to an internal identity
+  // id and its account status. It is timing-consistent and does not disclose
+  // existence to end users; callers translate a not-found result into the same
+  // response as invalid credentials.
+  rpc ResolveIdentity(ResolveIdentityRequest) returns (ResolveIdentityResponse) {
+    option (google.api.http) = {
+      post: "/internal/v1/identity/resolve"
+      body: "*"
+    };
+  }
+
+  // GetIdentity returns display and status data for a known identity id, used
+  // when building OTP/notification content and login responses.
+  rpc GetIdentity(GetIdentityRequest) returns (GetIdentityResponse) {
+    option (google.api.http) = {get: "/internal/v1/identity/{identity_id}"};
+  }
+}
+
+// IdentityStatus is the lifecycle status of an identity. Only ACTIVE identities
+// may authenticate.
+enum IdentityStatus {
+  // Default value; never set explicitly.
+  IDENTITY_STATUS_UNSPECIFIED = 0;
+
+  // The identity may authenticate.
+  IDENTITY_STATUS_ACTIVE = 1;
+
+  // The identity is deactivated and may not authenticate.
+  IDENTITY_STATUS_INACTIVE = 2;
+
+  // The identity is suspended and may not authenticate.
+  IDENTITY_STATUS_SUSPENDED = 3;
+
+  // The identity exists but has not completed activation.
+  IDENTITY_STATUS_PENDING_ACTIVATION = 4;
+
+  // The identity has been deleted.
+  IDENTITY_STATUS_DELETED = 5;
+}
+
+message ResolveIdentityRequest {
+  // The raw login identifier as submitted (server normalizes before lookup).
+  string identifier = 1;
+}
+
+message ResolveIdentityResponse {
+  // Whether an identity was found for the identifier.
+  bool found = 1;
+
+  // The internal identity id. Empty when found is false.
+  string identity_id = 2;
+
+  // The identity's lifecycle status. Unspecified when found is false.
+  IdentityStatus status = 3;
+
+  // The corporate the identity belongs to, if any.
+  string corporate_id = 4;
+}
+
+message GetIdentityRequest {
+  // The internal identity id to look up.
+  string identity_id = 1;
+}
+
+message GetIdentityResponse {
+  // The internal identity id.
+  string identity_id = 1;
+
+  // The identity's username.
+  string username = 2;
+
+  // The identity's human-readable display name.
+  string display_name = 3;
+
+  // The identity's lifecycle status.
+  IdentityStatus status = 4;
+
+  // The corporate the identity belongs to, if any.
+  string corporate_id = 5;
+
+  // The identity's phone number, masked for display (e.g. "+62-***-****-7890").
+  // Empty when no phone number is registered.
+  string masked_phone = 6;
+}

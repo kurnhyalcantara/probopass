@@ -1,0 +1,223 @@
+syntax = "proto3";
+
+package probopass.auth.v1;
+
+import "google/api/annotations.proto";
+
+// AuthService is the Authentication Module's user-facing surface for
+// credential verification and multi-factor authentication. It implements
+// Functional Area 1 (Login & Credential Verification) of the Authentication
+// Module FRD: the password login flow and the MFA verification step that
+// completes a login when a second factor is required.
+service AuthService {
+  // Login verifies an identifier/password pair for a registered OAuth2 client
+  // and either completes authentication, requires an MFA second factor, or
+  // requires a password change. It never reveals whether an identifier exists.
+  rpc Login(LoginRequest) returns (LoginResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/auth/login"
+      body: "*"
+    };
+  }
+
+  // VerifyMfa submits a second-factor challenge response against an in-flight
+  // MFA session created by Login, completing authentication when the factor
+  // verifies.
+  rpc VerifyMfa(VerifyMfaRequest) returns (VerifyMfaResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/auth/mfa/verify"
+      body: "*"
+    };
+  }
+}
+
+// AuthenticationResult signals the outcome of a login or MFA step and tells
+// the client which fields of the response are populated.
+enum AuthenticationResult {
+  // Default value; never set explicitly.
+  AUTHENTICATION_RESULT_UNSPECIFIED = 0;
+
+  // Authentication is complete; access and refresh tokens are issued.
+  AUTHENTICATION_RESULT_COMPLETED = 1;
+
+  // Credentials verified but a second factor is required; an mfa_session_token
+  // and the available_factors are returned.
+  AUTHENTICATION_RESULT_MFA_REQUIRED = 2;
+
+  // Credentials verified but the password must be changed before access is
+  // granted; a forced_change_session_token is returned.
+  AUTHENTICATION_RESULT_PASSWORD_CHANGE_REQUIRED = 3;
+}
+
+// Aal is the NIST SP 800-63B Authenticator Assurance Level attained by the
+// session, determined by the factors used during authentication.
+enum Aal {
+  // Default value; never set explicitly.
+  AAL_UNSPECIFIED = 0;
+
+  // Single factor (password only, or recovery-code fallback).
+  AAL_AAL1 = 1;
+
+  // Two factors (password plus TOTP or SMS OTP).
+  AAL_AAL2 = 2;
+
+  // Two factors with a hardware authenticator requiring user verification
+  // (password plus FIDO2).
+  AAL_AAL3 = 3;
+}
+
+// FactorType enumerates the supported multi-factor authentication methods.
+enum FactorType {
+  // Default value; never set explicitly.
+  FACTOR_TYPE_UNSPECIFIED = 0;
+
+  // Time-based one-time password (RFC 6238) from an authenticator app.
+  FACTOR_TYPE_TOTP = 1;
+
+  // One-time password delivered to the user's registered phone via SMS.
+  FACTOR_TYPE_SMS_OTP = 2;
+
+  // FIDO2 / WebAuthn hardware or platform authenticator.
+  FACTOR_TYPE_FIDO2 = 3;
+
+  // Single-use recovery code issued at MFA enrollment.
+  FACTOR_TYPE_RECOVERY_CODE = 4;
+}
+
+// DeviceFingerprint carries the client-supplied attributes used, together with
+// server-observed request attributes, to compute a device fingerprint. All
+// fields are optional.
+message DeviceFingerprint {
+  // navigator.userAgent value; the server also observes the User-Agent header.
+  string user_agent = 1;
+
+  // Preferred language(s); the server also observes the Accept-Language header.
+  string accept_language = 2;
+
+  // Screen resolution formatted as "{width}x{height}".
+  string screen_resolution = 3;
+
+  // IANA timezone name or UTC offset (e.g. "Asia/Jakarta" or "+07:00").
+  string timezone = 4;
+
+  // Platform string (e.g. "Win32", "MacIntel", "iPhone").
+  string platform = 5;
+
+  // Color depth in bits.
+  int32 color_depth = 6;
+
+  // BCP 47 language tag (e.g. "en-US").
+  string language = 7;
+}
+
+// Fido2Assertion is the WebAuthn assertion response returned by an
+// authenticator during FIDO2 MFA verification. Byte fields are Base64URL
+// encoded strings as delivered by the browser WebAuthn API.
+message Fido2Assertion {
+  // Base64URL-encoded credential id of the asserting authenticator.
+  string credential_id = 1;
+
+  // Base64URL-encoded clientDataJSON.
+  string client_data_json = 2;
+
+  // Base64URL-encoded authenticatorData.
+  string authenticator_data = 3;
+
+  // Base64URL-encoded assertion signature.
+  string signature = 4;
+}
+
+message LoginRequest {
+  // The login identifier (username; email in a later phase). 3-256 chars,
+  // trimmed and lowercased server-side before resolution.
+  string identifier = 1;
+
+  // The plaintext password. 1-128 chars; the server truncates at 128 before
+  // hashing and never logs or stores it.
+  string password = 2;
+
+  // The registered OAuth2 client the login originates from.
+  string client_id = 3;
+
+  // Optional client-supplied device fingerprint attributes.
+  DeviceFingerprint device_fingerprint = 4;
+}
+
+message LoginResponse {
+  // Outcome of the login attempt; determines which fields below are set.
+  AuthenticationResult authentication_result = 1;
+
+  // Signed JWT access token. Set only when authentication_result is COMPLETED.
+  string access_token = 2;
+
+  // Token type of access_token; always "Bearer" when present.
+  string token_type = 3;
+
+  // Access token lifetime in seconds. Set when COMPLETED.
+  int64 expires_in = 4;
+
+  // Opaque refresh token. Set when COMPLETED (also delivered as a cookie for
+  // web clients).
+  string refresh_token = 5;
+
+  // Identifier of the created session. Set when COMPLETED.
+  string session_id = 6;
+
+  // Authenticator assurance level of the session. Set when COMPLETED.
+  Aal aal = 7;
+
+  // Whether the user must change their password. Set when COMPLETED.
+  bool force_password_change = 8;
+
+  // Opaque MFA session token to submit with VerifyMfa. Set when MFA_REQUIRED.
+  string mfa_session_token = 9;
+
+  // Factors the user may use to satisfy the MFA challenge. Set when
+  // MFA_REQUIRED.
+  repeated FactorType available_factors = 10;
+
+  // Restricted token accepted only at the forced password-change endpoint.
+  // Set when PASSWORD_CHANGE_REQUIRED.
+  string forced_change_session_token = 11;
+}
+
+message VerifyMfaRequest {
+  // Opaque MFA session token returned by Login.
+  string mfa_session_token = 1;
+
+  // The factor type the user is verifying with.
+  FactorType factor_type = 2;
+
+  // The submitted code. Required for TOTP, SMS_OTP, and RECOVERY_CODE.
+  string code = 3;
+
+  // The WebAuthn assertion. Required for FIDO2.
+  Fido2Assertion credential = 4;
+}
+
+message VerifyMfaResponse {
+  // Outcome of the MFA step; COMPLETED on success.
+  AuthenticationResult authentication_result = 1;
+
+  // Signed JWT access token. Set when COMPLETED.
+  string access_token = 2;
+
+  // Token type of access_token; always "Bearer" when present.
+  string token_type = 3;
+
+  // Access token lifetime in seconds. Set when COMPLETED.
+  int64 expires_in = 4;
+
+  // Opaque refresh token. Set when COMPLETED.
+  string refresh_token = 5;
+
+  // Identifier of the created session. Set when COMPLETED.
+  string session_id = 6;
+
+  // Authenticator assurance level of the session. Set when COMPLETED.
+  Aal aal = 7;
+
+  // True when a recovery code was used and few unused codes remain, advising
+  // the user to regenerate their recovery codes.
+  bool low_recovery_codes_warning = 8;
+}
